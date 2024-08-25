@@ -60,6 +60,7 @@ To run the Text Steganography Encryption and Decryption Tool, follow these steps
 Here’s a snapshot of the application in action:
 
 ![Main](images/main.png)
+![Main1](images/main1.png)
 
 ## Why Use This Tool?
 

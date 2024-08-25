@@ -3,10 +3,10 @@ from tkinter import messagebox
 import random
 
 
-# Function to generate random symbols (using only non-alphanumeric visible ASCII symbols)
+# Function to generate random symbols (excluding letters, digits, and space)
 def generate_random_symbols(length):
-    # Use only visible ASCII characters excluding letters and digits (33-126, excluding A-Z, a-z, 0-9)
-    symbols = ''.join(chr(i) for i in range(33, 127) if not chr(i).isalnum())
+    # Use only visible ASCII characters excluding letters, digits, and space (32-126, excluding alphanum and space)
+    symbols = ''.join(chr(i) for i in range(33, 127) if not chr(i).isalnum() and chr(i) != ' ')
     return ''.join(random.choice(symbols) for _ in range(length))
 
 
@@ -24,7 +24,7 @@ def encrypt_text(plaintext, key):
         encrypted_text.append(char)  # Insert the actual character
 
         # Insert a large number of random symbols for greater obfuscation
-        random_symbols = generate_random_symbols(random.randint(20, 50))
+        random_symbols = generate_random_symbols(random.randint(10, 20))
         encrypted_text.append(random_symbols)
 
     # Join everything into one string
@@ -33,12 +33,10 @@ def encrypt_text(plaintext, key):
     # Step 2: Apply ASCII shift and convert to ASCII codes using ord()
     numeric_encrypted_string = ''
     for char in encrypted_string:
-        if 32 <= ord(char) <= 126:  # Process only visible ASCII characters (including space)
-            shifted_char = chr(((ord(char) - 32 + key) % 95) + 32)
-            ascii_value = ord(shifted_char)
-            numeric_encrypted_string += str(ascii_value)  # Concatenate without spaces
-        else:
-            numeric_encrypted_string += str(ord(char))  # Non-visible characters (like space)
+        # Apply shift within the range of ASCII 32 (space) to 126 (~)
+        shifted_char = chr(((ord(char) - 32 + key) % 95) + 32) if 32 <= ord(char) <= 126 else char
+        ascii_value = ord(shifted_char)
+        numeric_encrypted_string += str(ascii_value)  # Concatenate without spaces
 
     return numeric_encrypted_string
 
