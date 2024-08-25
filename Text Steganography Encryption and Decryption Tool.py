@@ -2,13 +2,15 @@ import tkinter as tk
 from tkinter import messagebox
 import random
 
-# Function to generate random symbols (using only common visible symbols)
+
+# Function to generate random symbols (using only non-alphanumeric visible ASCII symbols)
 def generate_random_symbols(length):
-    # Use only common visible symbols
-    symbols = '!@#$%^&*()_+{}[]<>?/\\|'
+    # Use only visible ASCII characters excluding letters and digits (33-126, excluding A-Z, a-z, 0-9)
+    symbols = ''.join(chr(i) for i in range(33, 127) if not chr(i).isalnum())
     return ''.join(random.choice(symbols) for _ in range(length))
 
-# Encryption function with more symbols for obfuscation, using standard visible symbols
+
+# Encryption function using ASCII shift and converting to concatenated numbers (ord())
 def encrypt_text(plaintext, key):
     encrypted_text = []
     try:
@@ -17,36 +19,64 @@ def encrypt_text(plaintext, key):
         messagebox.showerror("Input Error", "Key must be an integer!")
         return ""
 
+    # Step 1: Insert random symbols and apply ASCII shift
     for char in plaintext:
-        # Insert the actual character
-        encrypted_text.append(char)
+        encrypted_text.append(char)  # Insert the actual character
 
         # Insert a large number of random symbols for greater obfuscation
         random_symbols = generate_random_symbols(random.randint(20, 50))
         encrypted_text.append(random_symbols)
 
-    # Join everything and then apply the ASCII shift to the entire string
+    # Join everything into one string
     encrypted_string = ''.join(encrypted_text)
-    shifted_encrypted_string = ''.join([chr((ord(char) + key) % 128) for char in encrypted_string])
 
-    return shifted_encrypted_string
+    # Step 2: Apply ASCII shift and convert to ASCII codes using ord()
+    numeric_encrypted_string = ''
+    for char in encrypted_string:
+        shifted_char = chr(((ord(char) - 32 + key) % 95) + 32) if 32 <= ord(char) <= 126 else char
+        ascii_value = ord(shifted_char)
+        numeric_encrypted_string += str(ascii_value)  # Concatenate without spaces
 
-# Decryption function with correct logic using standard visible symbols
+    return numeric_encrypted_string
+
+
+# Decryption function to reverse the encryption process
 def decrypt_text(ciphertext):
     all_decryptions = []
 
-    # Try all possible key shifts (0 to 127)
-    for key in range(128):
-        # Perform the reverse shift (subtract the key)
-        shifted_text = ''.join([chr((ord(char) - key) % 128) for char in ciphertext])
+    # Step 1: Try all possible key shifts (0 to 94)
+    for key in range(95):
+        decrypted_chars = []
+        i = 0
+
+        # Step 2: Convert numeric values back to characters
+        while i < len(ciphertext):
+            if ciphertext[i] != '1':  # Two-digit ASCII (32-99)
+                num_str = ciphertext[i:i+2]
+                i += 2
+            else:  # Three-digit ASCII (100-126)
+                num_str = ciphertext[i:i+3]
+                i += 3
+
+            try:
+                ascii_value = int(num_str)
+                shifted_value = ((ascii_value - 32 - key) % 95) + 32  # Reverse the ASCII shift
+                decrypted_chars.append(chr(shifted_value))
+            except ValueError:
+                # Handle potential errors gracefully
+                continue
+
+        # Join the decrypted characters into a string
+        decrypted_string = ''.join(decrypted_chars)
 
         # Filter out non-alphanumeric characters (i.e., keep only letters and digits)
-        filtered_text = ''.join([char for char in shifted_text if char.isalnum()])
+        filtered_text = ''.join([char for char in decrypted_string if char.isalnum()])
 
         # Add the result to the list with the corresponding key
         all_decryptions.append(f"Key {key}: {filtered_text}")
 
     return '\n'.join(all_decryptions)
+
 
 # Function to handle encrypt button click
 def on_encrypt_button_click():
@@ -63,6 +93,7 @@ def on_encrypt_button_click():
     text_encrypted_message.insert(tk.END, encrypted_message)
     text_encrypted_message.config(state=tk.DISABLED)
 
+
 # Function to handle decrypt button click
 def on_decrypt_button_click():
     ciphertext = entry_ciphertext.get("1.0", tk.END).strip()
@@ -76,6 +107,7 @@ def on_decrypt_button_click():
     text_decrypted_message.delete(1.0, tk.END)
     text_decrypted_message.insert(tk.END, decrypted_results)
     text_decrypted_message.config(state=tk.DISABLED)
+
 
 # Create the main window
 root = tk.Tk()
@@ -95,7 +127,7 @@ entry_key = tk.Entry(root, width=70)
 entry_key.pack()
 
 # Key information
-label_key_info = tk.Label(root, text="The key is used to shift the ASCII codes of the plaintext characters (mod 128).")
+label_key_info = tk.Label(root, text="The key is used to shift the ASCII codes of the plaintext characters (mod 95).")
 label_key_info.pack(pady=5)
 
 # Encrypt button
