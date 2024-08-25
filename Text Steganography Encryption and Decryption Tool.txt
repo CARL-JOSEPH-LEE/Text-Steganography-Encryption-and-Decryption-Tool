@@ -33,9 +33,12 @@ def encrypt_text(plaintext, key):
     # Step 2: Apply ASCII shift and convert to ASCII codes using ord()
     numeric_encrypted_string = ''
     for char in encrypted_string:
-        shifted_char = chr(((ord(char) - 32 + key) % 95) + 32) if 32 <= ord(char) <= 126 else char
-        ascii_value = ord(shifted_char)
-        numeric_encrypted_string += str(ascii_value)  # Concatenate without spaces
+        if 32 <= ord(char) <= 126:  # Process only visible ASCII characters (including space)
+            shifted_char = chr(((ord(char) - 32 + key) % 95) + 32)
+            ascii_value = ord(shifted_char)
+            numeric_encrypted_string += str(ascii_value)  # Concatenate without spaces
+        else:
+            numeric_encrypted_string += str(ord(char))  # Non-visible characters (like space)
 
     return numeric_encrypted_string
 
@@ -69,8 +72,8 @@ def decrypt_text(ciphertext):
         # Join the decrypted characters into a string
         decrypted_string = ''.join(decrypted_chars)
 
-        # Filter out non-alphanumeric characters (i.e., keep only letters and digits)
-        filtered_text = ''.join([char for char in decrypted_string if char.isalnum()])
+        # Filter out non-alphanumeric characters (i.e., keep only letters, digits, and space)
+        filtered_text = ''.join([char for char in decrypted_string if char.isalnum() or char == ' '])
 
         # Add the result to the list with the corresponding key
         all_decryptions.append(f"Key {key}: {filtered_text}")
