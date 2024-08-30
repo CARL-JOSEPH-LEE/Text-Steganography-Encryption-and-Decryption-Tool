@@ -1,7 +1,21 @@
 
 # Text Steganography Encryption and Decryption Tool
 
-## Introduction
+![封面图](images/main.png)
+
+## Table of Contents
+
+-   [Overview](#overview)
+-   [Features](#features)
+-   [How It Works](#how it works)
+-   [Installation](#installation)
+-   [Screenshots](#screenshots)
+-   [Contribution](#contribution)
+-   [License](#license)
+-   [Acknowledgements](#acknowledgements)
+-   [Contact](#contact)
+
+## Overview
 
 Welcome to the **Text Steganography Encryption and Decryption Tool**, an advanced application that integrates steganography with cryptography. This tool allows you to encrypt and decrypt text using an enhanced combination of random symbol insertion, ASCII-based encryption, and numeric transformation of characters. The graphical interface makes it accessible for both beginners and enthusiasts to explore the world of cryptography and steganography.
 
@@ -33,7 +47,7 @@ Welcome to the **Text Steganography Encryption and Decryption Tool**, an advance
 
 4. **Brute Force All Keys**: The tool tries all possible key values (0 to 94), listing each possible decryption attempt. This allows the user to visually identify the correct decrypted message based on the original plaintext.
 
-## Setup and Installation
+## Installation
 
 To run the Text Steganography Encryption and Decryption Tool, follow these steps:
 
@@ -56,10 +70,6 @@ To run the Text Steganography Encryption and Decryption Tool, follow these steps
     ```
 
 ## Screenshots
-
-Here’s a snapshot of the application in action:
-
-![Main](images/main.png)
 ![Main1](images/main1.png)
 
 ## Why Use This Tool?
@@ -74,9 +84,22 @@ Contributions are always welcome! Feel free to fork the repository, submit issue
 
 This project is licensed under the MIT License - see the LICENSE file for more details.
 
+## Acknowledgements
+
+-   The [Tkinter](https://docs.python.org/3/library/tkinter.html) library for creating the graphical user interface.
+-   The [random](https://docs.python.org/3/library/random.html) module for generating random symbols for text encryption.
+-   The [ASCII](https://en.wikipedia.org/wiki/ASCII) character encoding standard for character shifting and obfuscation in the encryption process.
+-   The [messagebox](https://docs.python.org/3/library/tkinter.messagebox.html) module from Tkinter for displaying error messages and user prompts.
+
 ## Contact
 
 For any questions, suggestions, or feedback:
 
 - **GitHub**: [CARL-JOSEPH-LEE](https://github.com/CARL-JOSEPH-LEE)
 - **Email**: carljosephlee3@gmail.com
+
+[![CARL-JOSEPH-LEE's GitHub stats](https://github-readme-stats.vercel.app/api?username=CARL-JOSEPH-LEE&show_icons=true&theme=radical)](https://github.com/anuraghazra/github-readme-stats)
+
+[![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=CARL-JOSEPH-LEE&theme=dark)](https://git.io/streak-stats)
+
+![Profile views](https://komarev.com/ghpvc/?username=CARL-JOSEPH-LEE&color=blue)
